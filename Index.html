@@ -1,0 +1,436 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2487.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"/&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;</p>
+<p class="p1">&lt;title&gt;Sophie — 9amHealth&lt;/title&gt;</p>
+<p class="p1">&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>*{box-sizing:border-box;margin:0;padding:0}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body{background:#FFFCF3;font-family:system-ui,sans-serif}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.msg-in{animation:fadeIn 0.25s ease forwards}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>textarea:focus{outline:none;border-color:#80AEFF !important}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>button.opt:hover{background:#F2EFE7 !important}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>button.cta:hover{opacity:0.88}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1">&lt;div id="root"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;script type="text/babel"&gt;</p>
+<p class="p1">const { useState, useRef, useEffect } = React;</p>
+<p class="p2"><br></p>
+<p class="p1">const SOPHIE_AVATAR = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style={{width:34,height:34,borderRadius:"50%",background:"linear-gradient(135deg,#F7BDE6,#80AEFF)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;span style={{color:"#212121",fontSize:12,fontWeight:600}}&gt;S&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">);</p>
+<p class="p1">const USER_AVATAR = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style={{width:34,height:34,borderRadius:"50%",background:"#ABD4FF",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;span style={{color:"#212121",fontSize:12,fontWeight:600}}&gt;A&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">);</p>
+<p class="p1">const TypingIndicator = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style={{display:"flex",gap:4,alignItems:"center",padding:"10px 14px"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{[0,1,2].map(i=&gt;&lt;div key={i} style={{width:6,height:6,borderRadius:"50%",background:"#AAA7A0",animation:`bounce 1.2s ease-in-out ${i*0.2}s infinite`}}/&gt;)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">);</p>
+<p class="p2"><br></p>
+<p class="p1">const NavBar = ({active, onNav}) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const tabs = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{id:"home",label:"Home",icon:(a)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg width="20" height="20" viewBox="0 0 24 24" fill={a?"#212121":"none"} stroke={a?"#212121":"#AAA7A0"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>)},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{id:"chat",label:"Chat",icon:(a)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={a?"#212121":"#AAA7A0"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>)},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{id:"meals",label:"Meals",icon:(a)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={a?"#212121":"#AAA7A0"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M18 8h1a4 4 0 010 8h-1"/&gt;&lt;path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="6" y1="1" x2="6" y2="4"/&gt;&lt;line x1="10" y1="1" x2="10" y2="4"/&gt;&lt;line x1="14" y1="1" x2="14" y2="4"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>)},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{id:"charts",label:"Charts",icon:(a)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={a?"#212121":"#AAA7A0"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;line x1="18" y1="20" x2="18" y2="10"/&gt;&lt;line x1="12" y1="20" x2="12" y2="4"/&gt;&lt;line x1="6" y1="20" x2="6" y2="14"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>)},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:420,background:"#FFFCF3",borderTop:"1px solid #E6E3DB",display:"flex",justifyContent:"space-around",padding:"10px 0 18px",zIndex:100}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{tabs.map(({id,label,icon})=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const a=active===id;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div key={id} onClick={()=&gt;onNav(id)} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3,cursor:"pointer",padding:"0 12px"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{icon(a)}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span style={{fontSize:10,fontWeight:a?600:400,color:a?"#212121":"#AAA7A0"}}&gt;{label}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>})}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">};</p>
+<p class="p2"><br></p>
+<p class="p1">const WoopCard = ({wish,outcome,obstacle,plan,updated}) =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style={{background:"#FFFCF3",border:`1px solid ${updated?"#B0F2CE":"#E6E3DB"}`,borderRadius:16,padding:"14px 16px",marginTop:10}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span style={{fontSize:11,fontWeight:600,color:"#AAA7A0",letterSpacing:"0.06em",textTransform:"uppercase"}}&gt;Your plan&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{updated &amp;&amp; &lt;span style={{fontSize:11,background:"#B0F2CE",color:"#212121",borderRadius:20,padding:"2px 10px",fontWeight:600}}&gt;Updated&lt;/span&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{[</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{step:"W",label:"Wish",content:wish,color:"#80AEFF"},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{step:"O",label:"Outcome",content:outcome,color:"#B0F2CE"},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{step:"O",label:"Obstacle",content:updated?"Low energy after work AND the unpredictability of my schedule":obstacle,color:"#FFBD70"},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{step:"P",label:"Plan",content:updated?`${plan}\n\nBackup: If my evening gets derailed, I'll do a 10-minute walk at lunch instead -- that counts.`:plan,color:"#F7BDE6"},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>].map(({step,label,content,color})=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div key={label} style={{borderLeft:`3px solid ${color}`,paddingLeft:10,marginBottom:10}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{fontSize:10,fontWeight:600,color:"#AAA7A0",marginBottom:2,letterSpacing:"0.05em"}}&gt;{step} -- {label}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{fontSize:13,color:"#212121",lineHeight:1.55,whiteSpace:"pre-line"}}&gt;{content}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{borderTop:"1px solid #E6E3DB",paddingTop:10,marginTop:4}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{fontSize:11,fontWeight:600,color:"#AAA7A0",marginBottom:8,letterSpacing:"0.04em",textTransform:"uppercase"}}&gt;Active nudges&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{(updated?[</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{time:"12:00 PM",msg:"Backup move: got 10 minutes? A walk at lunch counts toward your goal."},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{time:"5:30 PM",msg:"Heading home? Even a 15-min walk before you sit down makes a difference."},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{time:"8:00 PM",msg:"Quick check: did you move today? Tap to log it."},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>]:[</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{time:"5:30 PM",msg:"End of workday nudge: a 20-min walk before dinner is your plan for tonight."},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{time:"7:00 PM",msg:"Reminder: movement doesn't have to be a workout. A walk counts."},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{time:"8:30 PM",msg:"Quick check: did you move today? Tap to log it."},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>]).map((n,i)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div key={i} style={{display:"flex",gap:10,marginBottom:6,alignItems:"flex-start"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span style={{fontSize:12,color:"#4D4D4D",fontWeight:600,minWidth:62,flexShrink:0}}&gt;{n.time}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span style={{fontSize:12,color:"#4D4D4D",lineHeight:1.5}}&gt;{n.msg}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">);</p>
+<p class="p2"><br></p>
+<p class="p1">const HomeScreen = ({onNav,data}) =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style={{paddingBottom:"5rem"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{width:36,height:36,borderRadius:"50%",background:"#F2EFE7",display:"flex",alignItems:"center",justifyContent:"center"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#AAA7A0" strokeWidth="2"&gt;&lt;path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/&gt;&lt;circle cx="12" cy="7" r="4"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{background:"#F2EFE7",borderRadius:20,padding:"6px 14px",display:"flex",alignItems:"center",gap:6}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AAA7A0" strokeWidth="2"&gt;&lt;rect x="3" y="3" width="7" height="7"/&gt;&lt;rect x="14" y="3" width="7" height="7"/&gt;&lt;rect x="3" y="14" width="7" height="7"/&gt;&lt;rect x="14" y="14" width="7" height="7"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span style={{fontSize:12,color:"#212121",fontWeight:500}}&gt;0/4&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{marginBottom:14}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{fontSize:11,fontWeight:600,color:"#AAA7A0",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:10}}&gt;Your tasks&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{background:"#fff",borderRadius:16,border:"1px solid #E6E3DB",overflow:"hidden"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{[{label:"Start Your Journey",icon:"🎯"},{label:"Create Your First Meal Plan",icon:"🥗"}].map(({label,icon},i)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div key={label} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 16px",borderBottom:i===0?"1px solid #E6E3DB":"none"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style={{display:"flex",alignItems:"center",gap:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{width:36,height:36,borderRadius:10,background:"#F2EFE7",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}&gt;{icon}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span style={{fontSize:14,color:"#212121",fontWeight:500}}&gt;{label}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#AAA7A0" strokeWidth="2"&gt;&lt;polyline points="9 18 15 12 9 6"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{marginBottom:10}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{fontSize:11,fontWeight:600,color:"#AAA7A0",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:10}}&gt;Your plan&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{background:"#fff",borderRadius:16,border:"1px solid #B0F2CE",padding:"16px",cursor:"pointer"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div style={{fontSize:14,fontWeight:600,color:"#212121",lineHeight:1.4,maxWidth:"75%"}}&gt;Build a consistent exercise habit&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span style={{fontSize:11,background:"#B0F2CE",color:"#212121",borderRadius:20,padding:"2px 10px",fontWeight:600,flexShrink:0}}&gt;Active&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{display:"flex",gap:6,marginBottom:14}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{[{step:"W",color:"#80AEFF"},{step:"O",color:"#FFBD70"},{step:"P",color:"#F7BDE6"}].map(({step,color})=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div key={step} style={{width:26,height:26,borderRadius:"50%",background:color,display:"flex",alignItems:"center",justifyContent:"center"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span style={{fontSize:11,fontWeight:700,color:"#212121"}}&gt;{step}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span style={{fontSize:12,color:"#AAA7A0",alignSelf:"center",marginLeft:4}}&gt;Updated today&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{borderTop:"1px solid #E6E3DB",paddingTop:10}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div style={{fontSize:11,fontWeight:600,color:"#AAA7A0",marginBottom:6,textTransform:"uppercase",letterSpacing:"0.04em"}}&gt;Today's nudges&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div style={{display:"flex",gap:6,flexWrap:"wrap"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{["12:00 PM","5:30 PM","8:00 PM"].map(t=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span key={t} style={{fontSize:11,background:"#F4F4F4",color:"#4D4D4D",borderRadius:20,padding:"4px 10px",fontWeight:500}}&gt;{t}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{marginTop:12,fontSize:12,color:"#80AEFF",fontWeight:600}}&gt;View full plan &amp;#8594;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{borderRadius:20,overflow:"hidden",position:"relative",height:180,background:"#E6E3DB",marginTop:6}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,#FBDEF3 0%,#ABD4FF 100%)",opacity:0.7}}/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{position:"absolute",bottom:16,left:16}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{fontSize:20,fontWeight:700,color:"#212121",lineHeight:1.3}}&gt;Your Healthy&lt;br/&gt;Weight Journey&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{marginTop:8,background:"#B0F2CE",borderRadius:20,padding:"4px 12px",display:"inline-block"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span style={{fontSize:11,fontWeight:600,color:"#212121"}}&gt;Available&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{position:"absolute",bottom:16,right:16,width:36,height:36,borderRadius:"50%",background:"#212121",display:"flex",alignItems:"center",justifyContent:"center"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFCF3"&gt;&lt;polygon points="5 3 19 12 5 21 5 3"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">);</p>
+<p class="p2"><br></p>
+<p class="p1">function App() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [phase, setPhase] = useState("intro");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [nav, setNav] = useState("chat");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [woopMsgs, setWoopMsgs] = useState([]);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [checkinMsgs, setCheckinMsgs] = useState([]);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [typing, setTyping] = useState(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [woopStep, setWoopStep] = useState(0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [checkinStep, setCheckinStep] = useState(0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [inputVal, setInputVal] = useState("");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [data, setData] = useState({wish:"",outcome:"",obstacle:"",plan:""});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [woopDone, setWoopDone] = useState(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const bottomRef = useRef(null);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const addSophieTo = (setter,msg) =&gt; setter(m=&gt;[...m,{from:"sophie",...msg,id:Date.now()+Math.random()}]);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const addUserTo = (setter,text) =&gt; setter(m=&gt;[...m,{from:"user",text,id:Date.now()+Math.random()}]);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const lockLastOf = (setter) =&gt; setter(m=&gt;m.map((msg,i)=&gt;i===m.length-1?{...msg,options:null,input:null}:msg));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const curSetter = () =&gt; phase==="woop"?setWoopMsgs:setCheckinMsgs;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const addSophie = (msg) =&gt; addSophieTo(curSetter(),msg);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const addUser = (text) =&gt; addUserTo(curSetter(),text);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const lockLast = () =&gt; lockLastOf(curSetter());</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const withTyping = (fn,delay=1300) =&gt; { setTyping(true); setTimeout(()=&gt;{setTyping(false);fn();},delay); };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const handleNav = (id) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setNav(id);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(id==="home") setPhase("home");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>else if(id==="chat"){ if(phase==="home") setPhase(woopDone?"checkin":"woop"); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>useEffect(()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(phase==="woop" &amp;&amp; woopMsgs.length===0){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>setWoopMsgs([{from:"sophie",id:1,</p>
+<p class="p1"><span class="Apple-converted-space">          </span>text:"Hi Angie! I'm Sophie, your 9amHealth coach. You've been doing really well -- 20 lbs down since you started is something to be proud of.\n\nI want to make sure you feel supported beyond just the medication. Can I walk you through a quick 5-minute exercise that can help healthy habits actually stick long-term?",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>options:["Sure, I'm open to it","What kind of exercise?"]}]);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},600);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>},[phase]);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>useEffect(()=&gt;{ bottomRef.current?.scrollIntoView({behavior:"smooth"}); },[woopMsgs,checkinMsgs,typing,phase]);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const handleOption = (opt) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>lockLast(); addUser(opt);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(phase==="woop") handleWoopOption(opt);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>else handleCheckinOption(opt);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const handleWoopOption = (opt) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const s = woopStep;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(s===0){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ addSophieTo(setWoopMsgs,{text:"It's called WOOP -- a method backed by behavioral science. We'll clarify what you want, why it matters, and most importantly, plan for the obstacles that usually get in the way.\n\nAt the end, I'll turn your plan into personalized nudges. Ready?",options:["Let's do it"]}); setWoopStep(1); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if(s===1){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ addSophieTo(setWoopMsgs,{text:"Think about your health beyond the medication -- your day-to-day lifestyle. What's one thing you wish felt easier or more natural?\n\nIt could be movement, sleep, eating, stress, energy levels... whatever feels most real right now.",input:true,placeholder:"e.g. I wish I could make exercise a consistent habit...",inputKey:"wish"}); setWoopStep(2); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if(s===4){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ addSophieTo(setWoopMsgs,{text:"That's a real commitment, Angie. Naming the obstacle is the hardest part -- most people skip it.\n\nI've saved your WOOP and set up your nudges. You'll find them on your dashboard anytime.",special:"woop",woopData:data}); setWoopDone(true); setWoopStep(5); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const handleWoopInput = (key) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(!inputVal.trim()) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const val = inputVal.trim();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>lockLast(); addUser(val);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const nd = {...data,[key]:val};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setData(nd); setInputVal("");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(key==="wish"){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ addSophieTo(setWoopMsgs,{text:"That's a really honest one -- and one of the most common things people on this journey want.\n\nNow imagine you actually made this happen. What would be the best outcome? How would you feel day-to-day, or what would be different about your life?",input:true,placeholder:"e.g. I'd have more energy, feel stronger, feel like I'm building something that lasts...",inputKey:"outcome"}); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if(key==="outcome"){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ addSophieTo(setWoopMsgs,{text:"That sounds worth building toward.\n\nHere's the important part -- most habits fall apart not because people don't want them, but because something gets in the way. What's the inner obstacle? Not your schedule or logistics, but a feeling or thought that makes it easy to skip.",input:true,placeholder:"e.g. After work I'm just exhausted and can't motivate myself...",inputKey:"obstacle"}); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if(key==="obstacle"){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ addSophieTo(setWoopMsgs,{text:"That's such a real one. And honestly, it tracks -- your coach mentioned that your schedule has been really demanding lately, especially with the project you've been managing at work.\n\nLow energy after a full day is one of the most common reasons exercise doesn't stick -- it's not a willpower problem.\n\nLet's make a plan for exactly that moment. Complete this:\n\n\"If I feel too tired to exercise after work, then I will...\"\n\nMake it specific and realistic -- something you could actually do even on a hard day.",input:true,placeholder:"e.g. I'll put on my shoes and do a 20-minute walk, even if that's all I do...",inputKey:"plan"}); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if(key==="plan"){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setData(nd);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ addSophieTo(setWoopMsgs,{text:"You named low energy as your obstacle -- that takes real self-awareness. A lot of people just tell themselves they're lazy.\n\nI also know from your coach that you used to walk your dog in the evenings before things got busy. That might be your built-in plan right there.\n\nBefore I save this: does this feel like a commitment you can actually try this week?",options:["Yes, I'm committing to this","I want to adjust something"]}); setWoopStep(4); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const startCheckin = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setPhase("checkin"); setNav("chat");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>withTyping(()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setCheckinMsgs([{from:"sophie",id:Date.now(),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>text:"Hey Angie -- it's been a couple of days. I wanted to check in on your plan.\n\nYou committed to: if you feel too tired to exercise after work, you'd put on your shoes and do a 20-minute walk anyway. Your coach also mentioned you were hoping to be more active before your daughter's graduation in June -- so I've been thinking about you. How did it go?",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>options:["I struggled with it","It went pretty well","I forgot about it"]}]);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setCheckinStep(0);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>},600);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const handleCheckinOption = (opt) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const s = checkinStep;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(s===0){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ setCheckinMsgs(m=&gt;[...m,{from:"sophie",id:Date.now(),text:"Thank you for being honest -- that's actually the most useful thing you can tell me.\n\nWhat got in the way? Was it the tiredness itself, or something else?",options:["I was exhausted and just couldn't","My schedule got unpredictable","I kept putting it off until it was too late","A mix of all of those"]}]); setCheckinStep(1); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if(s===1){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ setCheckinMsgs(m=&gt;[...m,{from:"sophie",id:Date.now(),text:"That makes a lot of sense. An unpredictable schedule is one of the hardest obstacles to plan around -- because by the time the evening arrives, the window is already closed.\n\nYour original plan was built around reclaiming the evening. We need to add a backup for when the day gets away from you.\n\nWant to update your WOOP with that in mind?",options:["Yes, let's update it"]}]); setCheckinStep(2); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if(s===2){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{ setCheckinMsgs(m=&gt;[...m,{from:"sophie",id:Date.now(),text:"Here's what I'd add to your obstacle: \"...and the unpredictability of my schedule.\"\n\nAnd a backup plan: \"If my evening gets derailed, I'll do a 10-minute walk at lunch instead -- that counts.\"\n\nI'll also add a midday nudge at noon so you have an earlier option before the day takes over.",options:["That feels right, update my plan"]}]); setCheckinStep(3); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if(s===3){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>withTyping(()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>setCheckinMsgs(m=&gt;[...m,{from:"sophie",id:Date.now(),text:"Done -- your plan is updated.\n\nThe fact that you tried, noticed what got in the way, and came back to refine it? That's exactly how habits form. It's never one clean attempt.\n\nTap home to see your updated plan on your dashboard.",special:"updatedWoop",woopData:data}]);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>setCheckinStep(4);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const renderMsg = (msg,i,allMsgs) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const isLast = i===allMsgs.length-1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const showInteractive = isLast&amp;&amp;(msg.options||msg.input);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(msg.from==="user") return (</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div key={msg.id||i} className="msg-in" style={{display:"flex",gap:8,alignItems:"flex-start",flexDirection:"row-reverse"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;USER_AVATAR/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{maxWidth:"78%",background:"#ABD4FF",color:"#212121",borderRadius:"14px 3px 14px 14px",padding:"10px 14px",fontSize:14,lineHeight:1.6,whiteSpace:"pre-line"}}&gt;{msg.text}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div key={msg.id||i} className="msg-in" style={{display:"flex",gap:8,alignItems:"flex-start"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;SOPHIE_AVATAR/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{maxWidth:"82%"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{msg.special ? (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{background:"#F4F4F4",borderRadius:"3px 14px 14px 14px",padding:"10px 14px",fontSize:14,lineHeight:1.6,color:"#212121",whiteSpace:"pre-line"}}&gt;{msg.text}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;WoopCard wish={msg.woopData?.wish||data.wish} outcome={msg.woopData?.outcome||data.outcome} obstacle={msg.woopData?.obstacle||data.obstacle} plan={msg.woopData?.plan||data.plan} updated={msg.special==="updatedWoop"}/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{msg.special==="woop" &amp;&amp; isLast &amp;&amp; woopDone &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button className="cta" onClick={startCheckin} style={{marginTop:14,background:"#212121",border:"none",borderRadius:24,padding:"11px 20px",color:"#FFFCF3",fontSize:13,fontWeight:600,cursor:"pointer",width:"100%",fontFamily:"inherit"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>Skip to 48-hour check-in</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>) : (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style={{background:"#F4F4F4",borderRadius:"3px 14px 14px 14px",padding:"10px 14px",fontSize:14,lineHeight:1.6,color:"#212121",whiteSpace:"pre-line"}}&gt;{msg.text}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{showInteractive &amp;&amp; msg.options &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style={{display:"flex",flexDirection:"column",gap:6,marginTop:8}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{msg.options.map((opt,j)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button key={j} className="opt" onClick={()=&gt;handleOption(opt)} style={{background:"#FFFCF3",border:"1px solid #E6E3DB",borderRadius:24,padding:"9px 16px",fontSize:13,color:"#212121",cursor:"pointer",textAlign:"left",fontFamily:"inherit",transition:"background 0.15s"}}&gt;{opt}&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{showInteractive &amp;&amp; msg.input &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style={{marginTop:8,display:"flex",gap:8}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;textarea value={inputVal} onChange={e=&gt;setInputVal(e.target.value)} placeholder={msg.placeholder} rows={2}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>onKeyDown={e=&gt;{if(e.key==="Enter"&amp;&amp;!e.shiftKey){e.preventDefault();handleWoopInput(msg.inputKey);}}}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>style={{flex:1,borderRadius:12,border:"1px solid #E6E3DB",padding:"9px 12px",fontSize:13,lineHeight:1.5,resize:"none",background:"#FFFCF3",color:"#212121",fontFamily:"inherit"}}/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button className="cta" onClick={()=&gt;handleWoopInput(msg.inputKey)} style={{background:"#212121",border:"none",borderRadius:12,padding:"9px 16px",color:"#FFFCF3",fontSize:13,fontWeight:600,cursor:"pointer",alignSelf:"stretch",fontFamily:"inherit"}}&gt;Send&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const IntroScreen = () =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",padding:"2rem 1.5rem",background:"#FFFCF3"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{marginBottom:32}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{fontSize:11,fontWeight:600,color:"#AAA7A0",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:12}}&gt;Demo persona&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{fontSize:28,fontWeight:700,color:"#212121",marginBottom:4}}&gt;Angie&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{fontSize:14,color:"#AAA7A0",marginBottom:28}}&gt;44 years old — Atlanta, Georgia&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{display:"flex",flexDirection:"column",gap:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{[</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{label:"Joined",value:"9amHealth in February 2026"},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{label:"Medication",value:"GLP-1 — continued from prior provider"},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{label:"Progress",value:"20 lbs lost since starting"},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{label:"Struggle",value:"Consistent exercise and building long-term healthy habits"},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{label:"App behavior",value:"Transactional — does what's needed to keep her prescription, but doesn't engage beyond that"},</p>
+<p class="p1"><span class="Apple-converted-space">          </span>].map(({label,value})=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div key={label} style={{display:"flex",gap:12,alignItems:"flex-start"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{fontSize:12,fontWeight:600,color:"#AAA7A0",minWidth:110,paddingTop:1,flexShrink:0}}&gt;{label}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{fontSize:14,color:"#212121",lineHeight:1.5}}&gt;{value}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{borderTop:"1px solid #E6E3DB",paddingTop:24,marginBottom:28}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{fontSize:12,fontWeight:600,color:"#AAA7A0",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:10}}&gt;What this prototype shows&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{display:"flex",flexDirection:"column",gap:8}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{[</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"Sophie surfaces a WOOP habit-building session organically",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"Angie builds a personalized plan with AI-generated nudges",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"Sophie follows up 48 hours later and evolves the plan",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"The plan lives on Angie's home screen as a persistent artifact",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"Sophie draws on Angie's care history to make it feel personal",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>].map((item,i)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div key={i} style={{display:"flex",gap:10,alignItems:"flex-start"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{width:18,height:18,borderRadius:"50%",background:"#B0F2CE",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:1}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg width="10" height="10" viewBox="0 0 12 12"&gt;&lt;polyline points="2 6 5 9 10 3" fill="none" stroke="#212121" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{fontSize:13,color:"#4D4D4D",lineHeight:1.5}}&gt;{item}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button onClick={()=&gt;{ setPhase("woop"); setNav("chat"); }} style={{background:"#212121",border:"none",borderRadius:24,padding:"14px 24px",color:"#FFFCF3",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",width:"100%"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>Start demo &amp;#8594;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const showChat = phase==="woop"||phase==="checkin";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style={{maxWidth:420,margin:"0 auto",background:"#FFFCF3",minHeight:"100vh",fontFamily:"system-ui,sans-serif",position:"relative"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{padding:"1rem 1rem 5rem"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{phase==="intro" &amp;&amp; &lt;IntroScreen/&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{phase==="home" &amp;&amp; &lt;HomeScreen onNav={handleNav} data={data}/&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{showChat &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16,paddingBottom:14,borderBottom:"1px solid #E6E3DB"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{width:38,height:38,borderRadius:"50%",background:"linear-gradient(135deg,#F7BDE6,#80AEFF)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span style={{color:"#212121",fontSize:13,fontWeight:600}}&gt;S&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style={{fontSize:15,fontWeight:600,color:"#212121"}}&gt;Sophie&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style={{fontSize:12,color:"#AAA7A0"}}&gt;{phase==="checkin"?"48-hour check-in":"Your 9amHealth coach"}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{marginLeft:"auto"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{phase==="woop"&amp;&amp;woopDone&amp;&amp;&lt;span style={{fontSize:11,background:"#B0F2CE",color:"#212121",borderRadius:20,padding:"3px 10px",fontWeight:600}}&gt;Plan saved&lt;/span&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{phase==="checkin"&amp;&amp;&lt;span style={{fontSize:11,background:"#FBDEF3",color:"#212121",borderRadius:20,padding:"3px 10px",fontWeight:600}}&gt;Day 3&lt;/span&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style={{display:"flex",flexDirection:"column",gap:14}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{(phase==="woop"?woopMsgs:checkinMsgs).map((msg,i,arr)=&gt;renderMsg(msg,i,arr))}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{typing&amp;&amp;(</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style={{display:"flex",gap:8,alignItems:"flex-start"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;SOPHIE_AVATAR/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div style={{background:"#F4F4F4",borderRadius:"3px 14px 14px 14px"}}&gt;&lt;TypingIndicator/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div ref={bottomRef}/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{phase!=="intro" &amp;&amp; &lt;NavBar active={nav} onNav={handleNav}/&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">ReactDOM.createRoot(document.getElementById("root")).render(&lt;App/&gt;);</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
